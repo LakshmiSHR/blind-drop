@@ -1,0 +1,85 @@
+.card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--color-surface);
+  border: 1px solid hsl(263 50% 25% / 0.3);
+  transition: border-color 0.3s ease;
+}
+
+.card:hover {
+  border-color: hsl(263 100% 67% / 0.5);
+}
+
+.artwork {
+  position: relative;
+  width: 100%;
+  padding-top: 60%;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.8s ease;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 30%,
+    hsl(220 25% 6% / 0.9) 100%
+  );
+}
+
+.info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progressBar {
+  height: 3px;
+  border-radius: 2px;
+  background: hsl(263 50% 25% / 0.3);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: hsl(263 100% 67%);
+  border-radius: 2px;
+  transition: width 1s ease;
+  box-shadow: 0 0 8px hsl(263 100% 67% / 0.5);
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+.card:hover .playOverlay {
+  opacity: 1;
+}
+
+.playBtn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: hsl(263 100% 67%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px hsl(263 100% 67% / 0.5);
+  transition: transform 0.2s ease;
+}
+
+.playBtn:hover {
+  transform: scale(1.1);
+}

@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+
+:root {
+  --color-bg: hsl(220 25% 6%);
+  --color-surface: hsl(220 20% 10%);
+  --color-surface-2: hsl(220 18% 14%);
+  --color-border: hsl(263 50% 25%);
+  --color-primary: hsl(263 100% 67%);
+  --color-secondary: hsl(174 70% 52%);
+  --color-text: hsl(0 0% 91%);
+  --color-muted: hsl(220 15% 55%);
+
+  --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-inter: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+}
+
+/* ─── Base ───────────────────────────────────────────────────── */
+
+html {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-jakarta);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(263 50% 35%);
+  border-radius: var(--radius-pill);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(263 50% 35%) transparent;
+}
+
+/* ─── Utility Classes ────────────────────────────────────────── */
+
+.glass {
+  background: hsl(220 20% 10% / 0.6);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid hsl(263 50% 25% / 0.4);
+  border-radius: var(--radius-lg);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, hsl(263 100% 75%), hsl(174 70% 60%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.neon-glow {
+  box-shadow:
+    0 0 12px hsl(263 100% 67% / 0.4),
+    0 0 30px hsl(174 70% 52% / 0.2);
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: hsl(220 20% 8%);
+  border: 1px solid hsl(263 50% 25% / 0.4);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-family: var(--font-jakarta);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px hsl(263 100% 67% / 0.15);
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: hsl(263 100% 67% / 0.12);
+  color: hsl(263 100% 80%);
+  border: 1px solid hsl(263 100% 67% / 0.25);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(220 20% 18% / 0.6) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ─── Grain Overlay ──────────────────────────────────────────── */
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────── */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 12px hsl(263 100% 67% / 0.3),
+      0 0 30px hsl(174 70% 52% / 0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 24px hsl(263 100% 67% / 0.6),
+      0 0 60px hsl(174 70% 52% / 0.3);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes reveal-burst {
+  from {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+@keyframes waveform {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
