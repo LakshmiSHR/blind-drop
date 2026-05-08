@@ -1,17 +1,22 @@
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { getArtistSongs } from '@/actions/songs'
-import ArtistDashboardClient from './ArtistDashboardClient'
+'use client'
 
-export const metadata = { title: 'Artist Dashboard' }
+type Props = {
+  songs: any[]
+}
 
-export default async function ArtistDashboardPage() {
-  const session = await auth()
+export default function ArtistDashboardClient({ songs }: Props) {
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'black',
+        color: 'white',
+        padding: '40px',
+      }}
+    >
+      <h1>Artist Dashboard</h1>
 
-  if (!session?.user?.id) redirect('/signin')
-
-  const result = await getArtistSongs()
-  const songs = result.success ? result.data : []
-
-  return <ArtistDashboardClient songs={songs} />
+      <p>Total Songs: {songs?.length || 0}</p>
+    </div>
+  )
 }
