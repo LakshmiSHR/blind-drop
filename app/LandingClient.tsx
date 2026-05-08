@@ -146,11 +146,16 @@ export function LandingClient() {
             style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}
           >
             <GlowButton size="lg" href="/discover">
-              Start Discovering
-            </GlowButton>
-            <GlowButton size="lg" href="/signin">
-              Upload a Track
-            </GlowButton>
+  Start Discovering
+</GlowButton>
+
+<GlowButton size="lg" href="/artist/signup">
+  Become an Artist
+</GlowButton>
+
+<GlowButton size="lg" href="/upload">
+  Upload Song
+</GlowButton>
           </motion.div>
         </motion.div>
       </section>

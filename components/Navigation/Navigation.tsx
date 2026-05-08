@@ -178,21 +178,14 @@ export function Navigation({ session }: NavigationProps) {
                   gap: 2,
                 }}
               >
-                <Link
-                  href="/profile"
-                  onClick={() => setDropdownOpen(false)}
-                  style={dropdownLinkStyle}
-                >
-                  Profile
-                </Link>
-                <Link
-                  href="/dashboard/user"
-                  onClick={() => setDropdownOpen(false)}
-                  style={dropdownLinkStyle}
-                >
-                  Dashboard
-                </Link>
-                <hr
+               <Link
+  href="/artist/signin"
+  onClick={() => setDropdownOpen(false)}
+  style={dropdownLinkStyle}
+>
+  🎤 Artist Panel
+</Link>
+       <hr
                   style={{
                     border: 'none',
                     borderTop: '1px solid hsl(263 50% 25% / 0.3)',

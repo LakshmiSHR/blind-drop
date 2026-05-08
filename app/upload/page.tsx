@@ -1,33 +1,38 @@
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { createServiceClient } from '@/lib/supabase/server'
 import { UploadForm } from './UploadForm'
-
-export const metadata = { title: 'Upload' }
 
 export default async function UploadPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect('/signin')
 
-  const role = session.user.role
-  if (role !== 'artist' && role !== 'admin') redirect('/signin')
+  if (!session?.user?.id) {
+    redirect('/artist/signin')
+  }
+
+  const supabase = createServiceClient()
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', session.user.id)
+    .single()
+
+  if (profile?.role !== 'artist') {
+    redirect('/')
+  }
 
   return (
     <main
       style={{
-        paddingTop: 88,
-        paddingBottom: 60,
-        minHeight: '100dvh',
-        maxWidth: 680,
+        paddingTop: 100,
+        maxWidth: 700,
         margin: '0 auto',
-        padding: '88px 24px 60px',
+        color: 'white',
       }}
     >
-      <h1
-        className="gradient-text"
-        style={{ fontSize: 32, fontWeight: 800, margin: '0 0 32px', textAlign: 'center' }}
-      >
-        Upload a Track
-      </h1>
+      <h1>Upload Song</h1>
+
       <UploadForm />
     </main>
   )

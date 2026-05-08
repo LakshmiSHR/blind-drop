@@ -6,7 +6,11 @@ import { submitRating } from '@/actions/ratings'
 interface RatingSliderProps {
   songId: string
   existingRating: number | null
-  onReveal: (data: { isRevealed: boolean; avgRating: number; ratingCount: number }) => void
+  onReveal?: (data: {
+    isRevealed: boolean
+    avgRating: number
+    ratingCount: number
+  }) => void
 }
 
 const ratingColors: Record<number, string> = {
@@ -22,30 +26,56 @@ const ratingColors: Record<number, string> = {
   10: 'hsl(0 80% 60%)',
 }
 
-export function RatingSlider({ songId, existingRating, onReveal }: RatingSliderProps) {
-  const [selected, setSelected] = useState<number | null>(existingRating)
+export function RatingSlider({
+  songId,
+  existingRating,
+  onReveal,
+}: RatingSliderProps) {
+  const [selected, setSelected] = useState<number | null>(
+    existingRating
+  )
+
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [submitted, setSubmitted] = useState(existingRating !== null)
+
+  const [error, setError] = useState<string | null>(
+    null
+  )
+
+  const [submitted, setSubmitted] = useState(
+    existingRating !== null
+  )
 
   async function handleRate(value: number) {
     if (submitted) return
 
-    // Optimistic
     setSelected(value)
     setError(null)
     setSubmitting(true)
 
-    const result = await submitRating(songId, value)
+    try {
+      const result: any = await submitRating(
+        songId,
+        value,
+        'user123'
+      )
 
-    if (result.success) {
-      setSubmitted(true)
-      if (result.data.isRevealed) {
-        onReveal(result.data)
+      if (result.success) {
+        setSubmitted(true)
+
+        if (onReveal) {
+          onReveal({
+            isRevealed: true,
+            avgRating: value,
+            ratingCount: 1,
+          })
+        }
+      } else {
+        setError(result.error || 'Failed')
+        setSelected(existingRating)
       }
-    } else {
-      setError(result.error)
-      setSelected(existingRating) // reset
+    } catch (err) {
+      console.log(err)
+      setError('Something went wrong')
     }
 
     setSubmitting(false)
@@ -53,8 +83,16 @@ export function RatingSlider({ songId, existingRating, onReveal }: RatingSliderP
 
   return (
     <div className="glass" style={{ padding: 24 }}>
-      <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 16px' }}>
-        {submitted ? `You rated: ${selected}/10` : 'Rate this track'}
+      <h3
+        style={{
+          fontSize: 16,
+          fontWeight: 700,
+          margin: '0 0 16px',
+        }}
+      >
+        {submitted
+          ? `You rated: ${selected}/10`
+          : 'Rate this track'}
       </h3>
 
       <div
@@ -65,7 +103,10 @@ export function RatingSlider({ songId, existingRating, onReveal }: RatingSliderP
           flexWrap: 'wrap',
         }}
       >
-        {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => {
+        {Array.from(
+          { length: 10 },
+          (_, i) => i + 1
+        ).map((n) => {
           const isSelected = selected === n
           const color = ratingColors[n]
 
@@ -82,21 +123,24 @@ export function RatingSlider({ songId, existingRating, onReveal }: RatingSliderP
                 border: isSelected
                   ? `2px solid ${color}`
                   : '1px solid hsl(263 50% 25% / 0.4)',
-                background: isSelected ? `${color}33` : 'hsl(220 20% 10%)',
-                color: isSelected ? color : 'hsl(220 15% 55%)',
+                background: isSelected
+                  ? `${color}33`
+                  : 'hsl(220 20% 10%)',
+                color: isSelected
+                  ? color
+                  : 'hsl(220 15% 55%)',
                 fontSize: 15,
                 fontWeight: 700,
-                cursor: submitted ? 'default' : 'pointer',
+                cursor: submitted
+                  ? 'default'
+                  : 'pointer',
                 transition: 'all 0.15s ease',
-                transform: isSelected ? 'scale(1.2)' : 'scale(1)',
-                boxShadow: isSelected ? `0 0 12px ${color}66` : 'none',
-              }}
-              onMouseEnter={(e) => {
-                if (!submitted) e.currentTarget.style.transform = 'scale(1.1)'
-              }}
-              onMouseLeave={(e) => {
-                if (!submitted)
-                  e.currentTarget.style.transform = isSelected ? 'scale(1.2)' : 'scale(1)'
+                transform: isSelected
+                  ? 'scale(1.2)'
+                  : 'scale(1)',
+                boxShadow: isSelected
+                  ? `0 0 12px ${color}66`
+                  : 'none',
               }}
             >
               {n}
@@ -106,7 +150,14 @@ export function RatingSlider({ songId, existingRating, onReveal }: RatingSliderP
       </div>
 
       {error && (
-        <p style={{ color: 'hsl(0 70% 65%)', fontSize: 13, marginTop: 12, textAlign: 'center' }}>
+        <p
+          style={{
+            color: 'hsl(0 70% 65%)',
+            fontSize: 13,
+            marginTop: 12,
+            textAlign: 'center',
+          }}
+        >
           {error}
         </p>
       )}
